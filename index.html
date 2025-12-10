@@ -191,16 +191,13 @@
 
 <script>
     /* =========================================
-       1. ZOHO SDK INITIALIZATION (FIXED ORDER)
+       1. ZOHO SDK INITIALIZATION
        ========================================= */
     let ZOHO_RECORD_ID = null;
     let ZOHO_MODULE = "Deals"; // Default
 
-    // 1. Start Listening FIRST (Before initialization)
-    // This ensures we catch the data even if it arrives instantly
+    // 1. Start Listening FIRST
     ZOHO.embeddedApp.on("PageLoad", function(data){
-        console.log(">>> DEBUG: PageLoad Event Fired:", data);
-        
         // Robust ID Extraction (Handles single ID or Arrays)
         if(data && data.EntityId) {
             ZOHO_RECORD_ID = data.EntityId;
@@ -213,24 +210,15 @@
         if(data && data.Entity) {
             ZOHO_MODULE = data.Entity;
         }
-
-        console.log(">>> DEBUG: Captured ID:", ZOHO_RECORD_ID);
-        console.log(">>> DEBUG: Captured Module:", ZOHO_MODULE);
     });
 
     // 2. Initialize the App
-    ZOHO.embeddedApp.init().then(function(){
-        console.log(">>> DEBUG: SDK Initialized");
-    });
+    ZOHO.embeddedApp.init();
 
     /* =========================================
-       2. SAVE & PROCEED LOGIC (Debug Version 3.1)
+       2. SAVE & PROCEED LOGIC
        ========================================= */
     function submitToBlueprint() {
-        // --- DEBUGGING START ---
-        console.log(">>> DEBUG: V3.1 LOGIC LOADED <<<");
-        // --- DEBUGGING END ---
-
         // A. Visual Feedback
         const btn = document.getElementById('btnProceed');
         const originalText = btn.innerHTML;
@@ -250,8 +238,6 @@
             Content: summaryText
         })
         .then(function(data){
-            console.log("SUCCESS: Note Added via API", data);
-            
             // D. Step 2: Execute the Blueprint Transition
             ZOHO.CRM.BLUEPRINT.proceed({
                 action : "save", 
@@ -259,16 +245,14 @@
             });
         })
         .catch(function(error){
-            console.error("FAILURE: Note API Failed", error);
-            
             // Fallback: If API fails, dump text into Blueprint notes
-            console.log("Attempting fallback to Blueprint Notes...");
             ZOHO.CRM.BLUEPRINT.proceed({
                 action : "save", 
                 notes : summaryText 
             });
         });
     }
+
     /* =========================================
        3. TEXT GENERATION & CLIPBOARD
        ========================================= */
@@ -298,9 +282,3 @@
 </script>
 </body>
 </html>
-
-
-
-
-
-
