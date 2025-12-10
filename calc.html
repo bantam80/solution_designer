@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VoiceOS Solution Builder</title>
+    
+    <script src="https://live.zwidgets.com/js-sdk/1.2/ZohoEmbededAppSDK.min.js"></script>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style type="text/tailwindcss">
+        body{font-family:'Inter',sans-serif;background-color:#f8fafc}.section-card{@apply bg-white rounded-xl border border-slate-200 shadow-sm p-8 mb-8 transition-all duration-200}.section-card:hover{@apply shadow-md border-blue-200}.step-header{@apply mb-6 pb-4 border-b-2 border-slate-100 flex items-end justify-between}.step-title{@apply text-2xl font-extrabold text-slate-800 tracking-tight}.step-subtitle{@apply text-sm text-slate-400 font-medium uppercase tracking-wider mb-1}.input-group{@apply relative bg-slate-50 rounded-lg p-4 border border-slate-200 transition-colors focus-within:bg-white focus-within:ring-2 focus-within:ring-blue-500/20 focus-within:border-blue-500}.label-main{@apply block text-sm font-semibold text-slate-700 mb-1}.label-sub{@apply block text-xs text-slate-500 mb-3}.input-clean{@apply w-24 text-right font-bold text-slate-800 bg-white border border-slate-300 rounded-md py-1.5 px-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all}.input-col{@apply w-full text-center font-bold text-slate-800 bg-white border border-slate-300 rounded-md py-2 px-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all}.price-tag{@apply text-xs font-medium text-slate-500 mt-1 block text-right}.toggle-checkbox:checked{@apply right-0 border-green-400}.toggle-checkbox:checked+.toggle-label{@apply bg-green-400}.summary-row{@apply flex justify-between text-sm py-2 border-b border-slate-700/50 last:border-0}.summary-label{@apply text-slate-400}.summary-val{@apply font-medium text-slate-200}.setting-input-group{@apply flex flex-col space-y-1}.setting-label{@apply text-xs font-bold text-slate-500 uppercase tracking-wider}.setting-field{@apply w-full p-2 text-sm font-semibold text-slate-700 border border-slate-300 rounded focus:ring-2 focus:ring-blue-500 outline-none}.acc-panel{@apply mt-3 pt-3 border-t border-slate-100 bg-slate-50/50 rounded-b-lg px-1}.acc-label{@apply text-[10px] font-bold text-slate-400 mb-1 block uppercase tracking-wide text-center}.acc-input{@apply w-full text-xs border-slate-200 rounded p-1 text-center font-semibold focus:ring-1 focus:ring-blue-500 outline-none bg-white disabled:bg-slate-100 disabled:text-slate-400}.radio-card{@apply border border-slate-200 rounded-lg p-4 cursor-pointer hover:border-blue-400 transition-colors flex flex-col justify-center h-full}.radio-card input:checked+div{@apply text-blue-700}.radio-card:has(input:checked){@apply border-blue-500 bg-blue-50/30}
+    </style>
+</head>
+<body>
+
+<div class="grid grid-cols-1 lg:grid-cols-12 min-h-screen text-slate-600">
+    <div class="relative lg:col-span-8 lg:p-12 p-6 xl:col-span-9">
+        <header class="flex justify-between border-slate-200 border-b items-start max-w-4xl mb-6 pb-6">
+            <div>
+                <h1 class="font-extrabold text-4xl text-slate-900 tracking-tight">VoiceOS - Solution Architect</h1>
+                <p class="mt-2 text-slate-500 text-lg">Discovery & Configuration Worksheet</p>
+            </div>
+            <button class="flex items-center cursor-pointer bg-slate-100 font-semibold gap-2 hover:bg-slate-200 hover:text-blue-600 px-4 py-2 rounded-lg text-slate-500 transition-colors" onclick="toggleSettings()">
+                <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+                    <path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+                </svg>
+                <span>Settings</span>
+            </button>
+        </header>
+
+        <div class="border hidden bg-slate-100 border-slate-300 max-w-4xl mb-10 p-6 rounded-xl shadow-inner" id="settingsPanel">
+            <div class="flex items-center justify-between border-slate-200 border-b mb-4 pb-2">
+                <h3 class="flex items-center font-bold gap-2 text-lg text-slate-800">
+                    Hardware Pricing Defaults
+                </h3>
+                <button class="font-bold text-sm hover:text-red-500 text-slate-400" onclick="toggleSettings()">Close</button>
+            </div>
+            <div class="grid gap-4 grid-cols-2 md:grid-cols-4">
+                <div class="setting-input-group"><label class="setting-label">Basic Phone</label><input class="setting-field" type="number" id="price_hwBasic" value="95"></div>
+                <div class="setting-input-group"><label class="setting-label">Office Phone</label><input class="setting-field" type="number" id="price_hwOffice" value="125"></div>
+                <div class="setting-input-group"><label class="setting-label">Exec Phone</label><input class="setting-field" type="number" id="price_hwExec" value="205"></div>
+                <div class="setting-input-group"><label class="setting-label">Conf Phone (Base)</label><input class="setting-field" type="number" id="price_hwConf" value="630"></div>
+                <div class="setting-input-group"><label class="setting-label">Conf Mics</label><input class="setting-field" type="number" id="price_hwConfMics" value="220"></div>
+                <div class="setting-input-group"><label class="setting-label">Headset</label><input class="setting-field" type="number" id="price_hwHeadsets" value="185"></div>
+                <div class="setting-input-group"><label class="setting-label">Sidecar</label><input class="setting-field" type="number" id="price_sidecar" value="125"></div>
+                <div class="setting-input-group"><label class="setting-label">Cordless Handset</label><input class="setting-field" type="number" id="price_hwCordlessHandset" value="95"></div>
+                <div class="setting-input-group"><label class="setting-label">Base Station</label><input class="setting-field" type="number" id="price_hwCordlessBase" value="135"></div>
+                <div class="setting-input-group"><label class="setting-label">ATA Device</label><input class="setting-field" type="number" id="price_ata" value="45"></div>
+                <div class="setting-input-group"><label class="setting-label">Wall Mount</label><input class="setting-field" type="number" id="price_hwWallMount" value="10"></div>
+                <div class="setting-input-group"><label class="setting-label">Power Supply</label><input class="setting-field" type="number" id="price_hwPowerSupply" value="15"></div>
+            </div>
+            <div class="flex justify-end border-slate-200 border-t mt-6 pt-4">
+                <button class="font-bold text-white bg-blue-600 hover:bg-blue-500 px-6 py-2 rounded shadow-sm transition-colors" onclick="saveSettings()">Apply New Pricing</button>
+            </div>
+        </div>
+
+        <form class="max-w-4xl space-y-8" id="scopingForm">
+            <div class="section-card">
+                <div class="step-header"><div><h2 class="step-title">User Licenses</h2></div><span class="step-subtitle">Step 01</span></div>
+                <div class="space-y-4">
+                    <div class="flex items-center justify-between input-group"><div class="pr-4"><label class="label-main">Standard Users</label><span class="label-sub">Common areas, lobby phones. (No VM/Apps)</span></div><div class="flex flex-col items-end"><input class="calc-trigger input-clean" type="number" id="standardUsers" placeholder="0" min="0"><span class="price-tag">$21/mo + $12 Setup</span></div></div>
+                    <div class="flex items-center justify-between input-group"><div class="pr-4"><label class="label-main">Advanced Users</label><span class="label-sub">Office staff, sales, remote. (Incl. VM, Mobile & Desktop App)</span></div><div class="flex flex-col items-end"><input class="calc-trigger input-clean" type="number" id="advancedUsers" placeholder="0" min="0"><span class="price-tag">$29/mo + $14 Setup</span></div></div>
+                    <div class="flex items-center justify-between input-group border-l-4 border-l-indigo-500"><div class="pr-4"><label class="label-main text-indigo-900">Contact Center Agents</label><span class="label-sub text-indigo-700/70">Staff requiring call queues & login/logout capability.</span></div><div class="flex flex-col items-end"><input class="calc-trigger input-clean border-indigo-200 focus:border-indigo-500 focus:ring-indigo-500" type="number" id="ccAgents" placeholder="0" min="0"><span class="price-tag text-indigo-600">$55/mo + $25 Setup</span></div></div>
+                </div>
+            </div>
+
+            <div class="section-card">
+                <div class="step-header"><div><h2 class="step-title">Connectivity & SIP</h2></div><span class="step-subtitle">Step 02</span></div>
+                <div class="border rounded-lg border-slate-200 bg-slate-50 p-5">
+                    <label class="flex cursor-pointer items-start">
+                        <div class="relative items-center">
+                            <input class="calc-trigger sr-only" type="checkbox" id="sipTrunkingToggle">
+                            <div class="rounded-full duration-200 ease-in-out bg-slate-200 h-6 shadow-inner transition-colors w-10" id="sipTrack"></div>
+                            <div class="rounded-full duration-200 ease-in-out absolute bg-white dot h-4 left-1 shadow top-1 transition-transform w-4" id="sipDot"></div>
+                        </div>
+                        <div class="ml-3"><span class="font-bold text-sm block text-slate-800">Integrate Existing PBX (SIP Trunking)</span><span class="text-xs text-slate-500 block mt-0.5">Keep their current phone system hardware.</span></div>
+                    </label>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 border-slate-200 border-t hidden mt-6 pt-6" id="sipDetails">
+                        <div><label class="label-main">Call Channels (Simultaneous Calls)</label><input class="input-clean w-full pl-3 text-left" type="number" id="sipChannels" placeholder="Min 3" min="3"></div>
+                        <div class="flex flex-col bg-white border p-3 rounded text-sm border-slate-200 justify-center text-slate-500"><div class="flex justify-between mb-1"><span>Rate:</span><span class="font-bold">$24.99/channel</span></div><div class="flex justify-between"><span>Setup:</span><span class="font-bold">$15.00/trunk</span></div></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section-card">
+                <div class="step-header"><div><h2 class="step-title">Phone Numbers</h2></div><span class="step-subtitle">Step 03</span></div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="border rounded-lg p-4 border-slate-200 bg-slate-50"><h3 class="font-bold text-xs tracking-wider uppercase mb-3 text-slate-400">Porting Existing</h3><div class="space-y-3"><div class="flex items-center justify-between"><label class="text-sm font-medium">Local Numbers</label><input class="calc-trigger input-clean w-20" type="number" id="portLocal" placeholder="Qty"></div><div class="flex items-center justify-between"><label class="text-sm font-medium">Toll-Free</label><input class="calc-trigger input-clean w-20" type="number" id="portTF" placeholder="Qty"></div></div></div>
+                    <div class="border rounded-lg p-4 bg-blue-50/50 border-blue-100"><h3 class="font-bold text-xs tracking-wider uppercase mb-3 text-blue-400">Ordering New</h3><div class="space-y-3"><div class="flex items-center justify-between"><div><label class="font-bold text-sm text-blue-900">Local DIDs</label><span class="text-[10px] text-blue-600 block">$1/mo (Excess) + $1 Setup</span></div><input class="calc-trigger input-clean w-20 border-blue-200" type="number" id="newLocal" placeholder="Qty"></div><div class="flex items-center justify-between"><div><label class="font-bold text-sm text-blue-900">Toll-Free</label><span class="text-[10px] text-blue-600 block">$1/mo (Excess) + $2 Setup</span></div><input class="calc-trigger input-clean w-20 border-blue-200" type="number" id="newTF" placeholder="Qty"></div></div></div>
+                </div>
+                <div class="border-l-4 hidden p-4 bg-blue-50 border-blue-500 mt-6" id="tfCallout"><p class="font-bold text-sm text-blue-800">ℹ️ Toll-Free Information</p><p class="text-xs text-blue-600 mt-1">Monthly fee of <strong>$15/mo per number</strong> includes 500 usage minutes. Overage billed at $0.039/min.</p></div>
+            </div>
+
+            <div class="section-card">
+                <div class="step-header"><div><h2 class="step-title">Call Recording</h2></div><span class="step-subtitle">Step 04</span></div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 lg:grid-cols-4">
+                    <label class="radio-card"><input class="calc-trigger sr-only" type="radio" value="none" name="callRecording" checked><div class="font-bold mb-1">No Recording</div><div class="text-xs text-slate-500">Standard Feature</div></label>
+                    <label class="radio-card"><input class="calc-trigger sr-only" type="radio" value="100" name="callRecording"><div class="font-bold mb-1">100 Hours</div><div class="text-xs text-slate-500">45-day storage</div><div class="font-bold text-xs mt-2 text-blue-600">$20/mo + $8 Setup</div></label>
+                    <label class="radio-card"><input class="calc-trigger sr-only" type="radio" value="500" name="callRecording"><div class="font-bold mb-1">500 Hours</div><div class="text-xs text-slate-500">90-day storage</div><div class="font-bold text-xs mt-2 text-blue-600">$70/mo + $8 Setup</div></label>
+                    <label class="radio-card"><input class="calc-trigger sr-only" type="radio" value="onprem" name="callRecording"><div class="font-bold mb-1">On-Premise</div><div class="text-xs text-slate-500">Custom Solution</div><div class="font-bold text-xs mt-2 text-blue-600">Custom Quote</div></label>
+                </div>
+            </div>
+
+            <div class="section-card">
+                <div class="step-header"><div><h2 class="step-title">Desk Hardware & Accessories</h2></div><span class="step-subtitle">Step 05</span></div>
+                <div class="flex items-center justify-between border-slate-200 bg-slate-50 border mb-6 p-4 rounded">
+                    <div><span class="font-bold text-sm block text-slate-800">Customer provided PoE?</span><span class="text-xs text-slate-500">Switches provide power to phones.</span></div>
+                    <label class="inline-flex cursor-pointer items-center"><input class="calc-trigger sr-only peer" type="checkbox" id="customerPoE"><div class="rounded-full h-6 after:absolute after:bg-white after:border after:border-gray-300 after:content-[''] after:h-5 after:rounded-full after:start-[2px] after:top-[2px] after:transition-all after:w-5 bg-gray-200 peer peer-checked:after:border-white peer-checked:after:translate-x-full peer-checked:bg-blue-600 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 relative rtl:peer-checked:after:-translate-x-full w-11"></div><span class="text-sm font-medium ms-3 peer-checked:text-blue-600 text-gray-900">Yes</span></label>
+                </div>
+                <div class="border-l-4 hidden p-4 bg-red-100 border-red-600 mb-6" id="licenseError"><div class="flex items-center"><div class="flex-shrink-0"><svg class="h-5 w-5 text-red-600" fill="currentColor" viewBox="0 0 20 20"><path d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" fill-rule="evenodd"/></svg></div><div class="ml-3"><p class="font-bold text-sm text-red-800">Configuration Error</p><p class="text-xs text-red-700">Total Endpoints (<span id="errEndCount">0</span>) exceeds User Licenses (<span id="errLicCount">0</span>). Each phone requires at least a Standard License.</p></div></div></div>
+                <div class="border rounded-lg border-slate-200 bg-slate-50 p-5 mb-6">
+                    <div class="flex items-center justify-between mb-6"><h3 class="font-bold text-sm text-slate-700">Physical Endpoints</h3><span class="text-xs px-2 bg-slate-200 py-1 rounded text-slate-600">Counts towards Deployment Fee</span></div>
+                    <div class="grid gap-4 grid-cols-2 lg:grid-cols-5 md:grid-cols-3">
+                        <div class="flex flex-col"><label class="font-bold text-sm mb-2 text-center text-slate-700">Basic Phone</label><input class="calc-trigger device-counter input-col psu-driver" type="number" id="hwBasic" placeholder="0" min="0"><div class="acc-panel"><div class="mb-2"><span class="acc-label">Wall Mounts</span><input class="calc-trigger acc-input acc-validate" type="number" id="mount_basic" placeholder="0" min="0" data-parent="hwBasic"></div><div><span class="acc-label">Power Supply</span><input class="calc-trigger acc-input acc-validate psu-unit" type="number" id="psu_basic" placeholder="0" min="0" data-parent="hwBasic"></div></div></div>
+                        <div class="flex flex-col"><label class="font-bold text-sm mb-2 text-center text-slate-700">Office Phone</label><input class="calc-trigger device-counter input-col psu-driver" type="number" id="hwOffice" placeholder="0" min="0"><div class="acc-panel"><div class="mb-2"><span class="acc-label">Wall Mounts</span><input class="calc-trigger acc-input acc-validate" type="number" id="mount_office" placeholder="0" min="0" data-parent="hwOffice"></div><div><span class="acc-label">Power Supply</span><input class="calc-trigger acc-input acc-validate psu-unit" type="number" id="psu_office" placeholder="0" min="0" data-parent="hwOffice"></div></div></div>
+                        <div class="flex flex-col"><label class="font-bold text-sm mb-2 text-center text-slate-700">Exec Phone</label><input class="calc-trigger device-counter input-col psu-driver" type="number" id="hwExec" placeholder="0" min="0"><div class="acc-panel"><div class="mb-2"><span class="acc-label">Wall Mounts</span><input class="calc-trigger acc-input acc-validate" type="number" id="mount_exec" placeholder="0" min="0" data-parent="hwExec"></div><div><span class="acc-label">Power Supply</span><input class="calc-trigger acc-input acc-validate psu-unit" type="number" id="psu_exec" placeholder="0" min="0" data-parent="hwExec"></div></div></div>
+                        <div class="flex flex-col"><label class="font-bold text-sm mb-2 text-center text-slate-700">Conf Phone</label><input class="calc-trigger device-counter input-col" type="number" id="hwConf" placeholder="0" min="0"><div class="acc-panel"><div class="mb-2"><span class="acc-label">Exp. Mics</span><input class="calc-trigger acc-input acc-validate" type="number" id="hwConfMics" placeholder="0" min="0" data-parent="hwConf"></div></div></div>
+                        <div class="flex flex-col"><label class="font-bold text-sm mb-2 text-center text-slate-700">Headsets</label><div class="relative"><input class="calc-trigger input-col" type="number" id="hwHeadsets" placeholder="0" min="0"></div></div>
+                    </div>
+                    <div class="text-sm p-3 hidden mt-4 bg-yellow-50 border-l-4 border-yellow-400 font-semibold text-yellow-800" id="poeWarning">⚠️ Customer has PoE. Are you sure you need additional power supplies?</div>
+                </div>
+                <div class="flex items-start border bg-white shadow-sm border-slate-200 p-4 rounded-lg">
+                    <div class="flex-1"><label class="label-main">Reception Sidecars</label><span class="label-sub">60 buttons per module (Max 180/3 units). Max 3 units per T43U/T46U/T48U.</span></div>
+                    <div class="text-right"><div class="flex items-center gap-2 justify-end"><span class="text-xs font-medium text-slate-400">$125 ea</span><input class="calc-trigger input-clean" type="number" id="sidecars" placeholder="0"></div><p class="font-bold text-blue-600 bg-blue-50 hidden mt-1 px-2 py-1 rounded text-[10px]" id="sidecarPSUInfo">+$15 PSU Added (Max Power Rule)</p></div>
+                </div>
+            </div>
+
+            <div class="section-card border-l-4 border-l-purple-500">
+                <div class="step-header border-none mb-0 pb-0">
+                    <div><h2 class="step-title text-purple-900">Cordless Mobility</h2><p class="text-xs text-purple-600/70 font-semibold mt-1">DECT Handsets & Base Stations</p></div>
+                    <div class="flex flex-col items-end"><input class="calc-trigger input-clean device-counter border-purple-200 focus:border-purple-500 focus:ring-purple-500 w-24" type="number" id="hwCordless" placeholder="Qty"><span class="mt-2 step-subtitle text-purple-300">Step 06</span></div>
+                </div>
+                <div class="mt-6 space-y-4">
+                    <div class="border rounded-lg p-4 bg-purple-50 border-purple-100"><label class="font-bold text-sm mb-2 block text-purple-900">Floorplan Available?</label><div class="flex gap-4"><label class="flex items-center cursor-pointer"><input class="calc-trigger form-radio text-purple-600" type="radio" id="fpYes" value="yes" name="floorplan"><span class="text-sm text-purple-800 ml-2">Yes (Hand drawing OK)</span></label><label class="flex items-center cursor-pointer"><input class="calc-trigger form-radio text-purple-600" type="radio" id="fpNo" value="no" name="floorplan"><span class="text-sm text-purple-800 ml-2">No (Survey Required)</span></label></div><p class="text-xs mt-2 italic text-purple-600/70">Please note solid block or concrete walls on drawing.</p></div>
+                </div>
+                <div class="flex justify-between rounded border bg-white border-purple-200 flex-col hidden items-start mt-4 p-3 shadow-sm sm:flex-row sm:items-center text-purple-800 text-sm" id="cordlessInfo">
+                    <div class="sm:mb-0 mb-2"><span class="font-bold block">Base Stations Required: <span id="baseStationCount">0</span></span><span class="text-xs block text-purple-600/80">Includes 1 Handset per Base</span></div>
+                    <div class="text-right"><span class="font-bold block">Standalone Handsets: <span id="extraHandsetCount">0</span></span><span class="text-xs block text-purple-600/80">Total Qty - Bases</span></div>
+                </div>
+                <div class="flex items-start border hidden mt-4 p-3 bg-red-50 border-red-100 gap-3 rounded-md" id="cordlessWarning"><div class="text-xl text-red-500">🛑</div><div><p class="font-bold text-sm text-red-800">Attention</p><p class="text-xs text-red-600">Needs Engineering Approval (>16 Handsets).</p></div></div>
+            </div>
+
+            <div class="section-card">
+                <div class="step-header"><div><h2 class="step-title">Analog Integrations</h2></div><span class="step-subtitle">Step 07</span></div>
+                <div class="space-y-6">
+                    <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                        <div class="border rounded-lg p-4 bg-emerald-50 border-emerald-100"><div class="flex items-center justify-between mb-2"><label class="font-bold text-sm text-emerald-800">E-Fax (Digital)</label><span class="text-xs px-2 py-0.5 rounded-full bg-emerald-200 text-emerald-800">$14/mo</span></div><input class="calc-trigger input-clean w-full border-emerald-200" type="number" id="efaxQty" placeholder="Qty Users"></div>
+                        <div class="border rounded-lg p-4 bg-red-50 border-red-100 hover:opacity-100 opacity-75 transition-opacity"><div class="flex items-center justify-between mb-2"><label class="font-bold text-sm text-red-800">POTS/Fax</label><span class="text-xs px-2 py-0.5 rounded-full bg-red-200 text-red-800">$32/mo per Fax</span></div><input class="calc-trigger input-clean device-counter w-full border-red-200" type="number" id="physicalFaxQty" placeholder="Qty Machines"><p class="mt-2 text-[10px] text-center text-red-600">Requires ATA ($45) + Config ($126) + POTS Replacement Line ($32/mo)</p></div>
+                    </div>
+                    <div class="border rounded-lg p-4 bg-amber-50 border-amber-100"><div class="flex items-center justify-between mb-2"><label class="font-bold text-sm text-amber-900">Overhead Paging Zones</label><span class="text-xs px-2 py-0.5 rounded-full bg-amber-200 text-amber-900">$32/mo per Zone</span></div><input class="calc-trigger input-clean device-counter w-full border-amber-200" type="number" id="pagingQty" placeholder="Qty Zones"><p class="mt-2 text-[10px] text-center text-amber-800">Requires ATA ($45) + Config ($126) + POTS Replacement Line ($32/mo) + Survey ($169)</p></div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <div class="flex flex-col bg-slate-900 h-screen lg:col-span-4 lg:p-8 overflow-y-auto p-6 shadow-2xl sticky text-slate-300 top-0 xl:col-span-3">
+        <div class="border-slate-700 border-b mb-8 pb-6">
+            <h2 class="font-bold text-white text-xl tracking-wide">Quote Summary</h2>
+            <div class="text-xs text-slate-500 tracking-wider uppercase font-mono mt-1">Estimate Preview</div>
+        </div>
+        <div class="border rounded-lg p-4 bg-slate-800 border-slate-700 mb-6">
+            <div class="flex items-center justify-between mb-2"><span class="font-bold text-xs tracking-wider uppercase text-slate-500">Deployment</span><span class="text-xs px-2 py-0.5 rounded-full bg-slate-700 text-slate-300" id="totalDeviceCount">0 Devices</span></div>
+            <div class="text-[10px] text-slate-500 text-right mb-4" id="deviceBreakdown"></div>
+            <div class="flex items-center justify-between mb-4 bg-slate-700/50 p-2 rounded"><label class="flex items-center cursor-pointer font-bold text-slate-300 text-xs"><input class="calc-trigger bg-slate-600 border-slate-500 focus:ring-blue-500 mr-2 rounded text-blue-500" type="checkbox" id="includeInstall">Include Installation?</label><span class="font-bold uppercase text-slate-500 text-[10px]" id="installStatus">Optional</span></div>
+            <div class="flex justify-between border-slate-700 border-t pt-3 items-end"><span class="text-sm text-orange-400">Onsite Fee</span><span class="font-bold text-white text-xl" id="deployFeeDisplay">$0.00</span></div><p class="mt-2 text-[10px] text-right text-slate-500" id="deployMsg">Min $169 (1-5 devices)</p>
+        </div>
+        <div class="text-xs rounded bg-red-900/50 border border-red-500 hidden mb-6 p-3 text-red-200" id="licenseErrorSidebar"><strong>⚠️ License Mismatch</strong><p class="mt-1">Endpoints > Users. Please add more user licenses.</p></div>
+        <div class="flex-1 space-y-6">
+            <div><h3 class="font-bold text-xs tracking-wider uppercase mb-3 text-slate-500">Monthly Recurring</h3><div class="space-y-1" id="mrcList"><div class="text-sm italic text-slate-600">No items yet...</div></div><div class="flex items-center justify-between border-slate-700 border-t mt-3 pt-3"><span class="text-sm text-slate-400">Total MRC</span><span class="font-bold text-lg text-blue-400" id="totalMRC">$0.00</span></div></div>
+            <div><h3 class="font-bold text-xs tracking-wider uppercase mb-3 text-slate-500">One-Time Costs</h3><div class="space-y-1" id="otcList"><div class="text-sm italic text-slate-600">No items yet...</div></div><div class="flex items-center justify-between border-slate-700 border-t mt-3 pt-3"><span class="text-sm text-slate-400">Total OTC</span><span class="font-bold text-lg text-orange-400" id="totalOTC">$0.00</span></div></div>
+        </div>
+        
+        <div class="border-slate-700 border-t mt-8 pt-6 space-y-3">
+            
+            <button class="flex items-center font-bold bg-slate-700 gap-3 group hover:bg-slate-600 justify-center px-4 py-3 rounded-lg text-white transition-all w-full text-sm" onclick="copyToClipboardAction()">
+                <svg class="h-5 w-5 group-hover:text-white text-blue-200 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+                <span>Copy Summary Only</span>
+            </button>
+            <div class="text-xs font-medium opacity-0 text-center text-green-400 transition-opacity" id="copyFeedback">Copied!</div>
+
+            <button id="btnProceed" class="flex items-center font-bold bg-green-600 gap-3 group hover:bg-green-500 hover:shadow-green-500/25 justify-center px-4 py-4 rounded-lg shadow-lg text-white transition-all w-full" onclick="submitToBlueprint()">
+                <span>Complete & Proceed &rarr;</span>
+            </button>
+
+        </div>
+    </div>
+</div>
+
+<script>
+    /* =========================================
+       1. ZOHO SDK INITIALIZATION
+       ========================================= */
+    let ZOHO_RECORD_ID = null;
+    let ZOHO_MODULE = "Deals"; // Default to Deals
+
+    ZOHO.embeddedApp.init().then(function(){
+        ZOHO.embeddedApp.on("PageLoad", function(data){
+            ZOHO_RECORD_ID = data.EntityId;
+            if(data.Entity) ZOHO_MODULE = data.Entity; 
+            console.log("Widget Loaded. Module: " + ZOHO_MODULE + " | ID: " + ZOHO_RECORD_ID);
+        });
+    });
+
+    /* =========================================
+       2. SAVE & PROCEED LOGIC
+       ========================================= */
+    function submitToBlueprint() {
+        // A. Visual Feedback
+        const btn = document.getElementById('btnProceed');
+        const originalText = btn.innerHTML;
+        btn.innerHTML = "Saving...";
+        btn.disabled = true;
+        btn.classList.add('opacity-75', 'cursor-not-allowed');
+
+        // B. Generate the Summary Text
+        calculateTotals(); // Ensure math is fresh
+        const summaryText = generateSummaryText();
+
+        // C. Update the Opportunity 'Description' Field First
+        var updateConfig = {
+            Entity: ZOHO_MODULE,
+            APIData: {
+                "id": ZOHO_RECORD_ID,
+                "Description": summaryText
+            },
+            Trigger: ["workflow"] // Triggers workflows if you have them
+        };
+
+        ZOHO.CRM.API.updateRecord(updateConfig).then(function(data){
+            console.log("Description Updated:", data);
+            
+            // D. If Update Successful -> Proceed Blueprint Transition
+            ZOHO.CRM.BLUEPRINT.proceed({
+                action : "save", 
+                data : {} 
+            }).then(function(){
+                console.log("Blueprint Transitioned");
+            });
+
+        }).catch(function(error){
+            console.error("Error updating record:", error);
+            alert("Error saving description to CRM. Check console for details.");
+            btn.innerHTML = originalText;
+            btn.disabled = false;
+            btn.classList.remove('opacity-75', 'cursor-not-allowed');
+        });
+    }
+
+    /* =========================================
+       3. TEXT GENERATION & CLIPBOARD
+       ========================================= */
+    
+    // Independent function to return the string
+    function generateSummaryText() {
+        const date=new Date().toLocaleDateString();let text=`UCaaS SCOPING & CONFIGURATION (${date})\n========================================\n`;let userSection="";if(val('standardUsers'))userSection+=`- ${val('standardUsers')}x Standard User ($${PRICES.stdUser}/mo)\n  - ${val('standardUsers')}x Setup Fee ($${PRICES.stdSetup} OTC)\n`;if(val('advancedUsers'))userSection+=`- ${val('advancedUsers')}x Advanced User ($${PRICES.advUser}/mo)\n  - ${val('advancedUsers')}x Setup Fee ($${PRICES.advSetup} OTC)\n`;if(val('ccAgents'))userSection+=`- ${val('ccAgents')}x CC Agent User ($${PRICES.ccAgent}/mo)\n  - ${val('ccAgents')}x Setup Fee ($${PRICES.ccSetup} OTC)\n`;if(userSection)text+=`\n[1] USER LICENSES:\n${userSection}`;let numSection="";const totalUsers=val('standardUsers')+val('advancedUsers')+val('ccAgents');const totalNums=val('portLocal')+val('portTF')+val('newLocal')+val('newTF');const included=Math.min(totalNums,totalUsers);const excess=Math.max(0,totalNums-totalUsers);if(totalNums>0){numSection+=`- Total Phone Numbers: ${totalNums}\n`;numSection+=`  - Included w/ Seat: ${included}\n`;if(excess>0)numSection+=`  - Billable Excess: ${excess} ($1.00/mo each)\n`;if(val('portLocal'))numSection+=`  - Porting Local: ${val('portLocal')}\n`;if(val('portTF'))numSection+=`  - Porting TF: ${val('portTF')}\n`;if(val('newLocal'))numSection+=`  - New Local: ${val('newLocal')}\n`;if(val('newTF'))numSection+=`  - New TF: ${val('newTF')}\n`;const totalTF=val('portTF')+val('newTF');if(totalTF>0){numSection+=`- Toll-Free Service Bundle: ${totalTF}x ($15.00/mo each)\n`}}if(numSection)text+=`\n[2] PHONE NUMBERS:\n${numSection}`;let svcSection="";const recPlan=document.querySelector('input[name="callRecording"]:checked').value;if(recPlan!=='none'){let recLabel=recPlan==='100'?"100 Hours ($20/mo)":(recPlan==='500'?"500 Hours ($70/mo)":"On-Premise (Custom)");svcSection+=`- Call Recording Plan: ${recLabel}\n`}if(svcSection)text+=`\n[3] SERVICES:\n${svcSection}`;let hwSection="";if(val('hwBasic')){hwSection+=`- ${val('hwBasic')}x Basic Phones\n`;if(val('mount_basic'))hwSection+=`  - ${val('mount_basic')}x Basic Wall Mounts\n`;if(val('psu_basic'))hwSection+=`  - ${val('psu_basic')}x Basic Power Supplies\n`}if(val('hwOffice')){hwSection+=`- ${val('hwOffice')}x Office Phones\n`;if(val('mount_office'))hwSection+=`  - ${val('mount_office')}x Office Wall Mounts\n`;if(val('psu_office'))hwSection+=`  - ${val('psu_office')}x Office Power Supplies\n`}if(val('hwExec')){hwSection+=`- ${val('hwExec')}x Exec Phones\n`;if(val('mount_exec'))hwSection+=`  - ${val('mount_exec')}x Exec Wall Mounts\n`;if(val('psu_exec'))hwSection+=`  - ${val('psu_exec')}x Exec Power Supplies\n`}if(val('hwConf')){hwSection+=`- ${val('hwConf')}x Conference Phones\n`;if(val('hwConfMics'))hwSection+=`  - ${val('hwConfMics')}x Expansion Mic Packs\n`}if(val('hwHeadsets'))hwSection+=`- ${val('hwHeadsets')}x Headsets\n`;if(val('sidecars')){hwSection+=`- ${val('sidecars')}x Reception Sidecars\n`;const sides=val('sidecars');const extraSidecarPSUs=Math.ceil(sides/2);if(extraSidecarPSUs>0)hwSection+=`  - ${extraSidecarPSUs}x Sidecar Booster Power Supplies (Max Power Rule)\n`}const cordless=val('hwCordless');if(cordless>0){const bases=Math.ceil(cordless/8);const standalones=Math.max(0,cordless-bases);hwSection+=`- ${bases}x Cordless Base Kits (Includes 1 Handset)\n`;if(standalones>0)hwSection+=`- ${standalones}x Extra Cordless Handsets\n`;if(cordless>16)hwSection+=`  *** ATTENTION: ENGINEERING APPROVAL NEEDED (>16 Units) ***\n`;if(document.getElementById('fpNo').checked)hwSection+=`  *** SITE SURVEY REQUIRED (Missing Floorplan) ***\n`}if(val('physicalFaxQty'))hwSection+=`- ${val('physicalFaxQty')}x Fax ATAs (Hardware)\n`;if(val('pagingQty'))hwSection+=`- ${val('pagingQty')}x Paging ATAs (Hardware)\n`;if(hwSection)text+=`\n[4] HARDWARE CONFIGURATION:\n${hwSection}`;const totalDev=document.getElementById('totalDeviceCount').innerText;const deployCost=document.getElementById('deployFeeDisplay').innerText;const installIncluded=document.getElementById('includeInstall').checked;text+=`\n[5] DEPLOYMENT & SETUP:\n`;text+=`- Total Endpoints: ${totalDev}\n`;if(installIncluded)text+=`- Onsite Installation Fee: ${deployCost}\n`;else text+=`- Onsite Installation: DECLINED\n`;if(val('pagingQty')>0||(cordless>0&&document.getElementById('fpNo').checked)){text+=`- Site Survey Fee: $${PRICES.pagingSurvey}\n`}let connSection="";if(isChecked('sipTrunkingToggle'))connSection+=`- SIP Trunking: ${val('sipChannels')} Channels\n`;if(connSection)text+=`\n[6] TRUNKING:\n${connSection}`;
+        return text;
+    }
+
+    // Button handler for manual copy (optional usage)
+    function copyToClipboardAction() {
+        const text = generateSummaryText();
+        navigator.clipboard.writeText(text).then(()=>{
+            const fb=document.getElementById('copyFeedback');
+            fb.classList.remove('opacity-0');
+            setTimeout(()=>fb.classList.add('opacity-0'),2000)
+        });
+    }
+
+    /* =========================================
+       4. UI / CALCULATOR LOGIC (Standard)
+       ========================================= */
+    let PRICES={stdUser:21,stdSetup:12,advUser:29,advSetup:14,ccAgent:55,ccSetup:25,sipChannel:24.99,sipSetup:15,newLocal:1,newLocalSetup:1,newTF:1,newTFSetup:2,sidecar:125,sidecarPSU:15,efax:14,efaxSetup:14,phyFaxLine:32,phyFaxConfig:126,potsLine:32,pagingConfig:126,pagingSurvey:169,hwBasic:95,hwOffice:125,hwExec:205,hwConf:630,hwConfMics:220,hwHeadsets:185,hwCordlessHandset:95,hwCordlessBase:135,ata:45,hwWallMount:10,hwPowerSupply:15,rec100:20,rec100Setup:8,rec500:70,rec500Setup:8};function val(id){return parseFloat(document.getElementById(id).value)||0}function isChecked(id){return document.getElementById(id).checked}function toggleSettings(){const panel=document.getElementById('settingsPanel');panel.classList.toggle('hidden')}function saveSettings(){PRICES.hwBasic=parseFloat(document.getElementById('price_hwBasic').value);PRICES.hwOffice=parseFloat(document.getElementById('price_hwOffice').value);PRICES.hwExec=parseFloat(document.getElementById('price_hwExec').value);PRICES.hwConf=parseFloat(document.getElementById('price_hwConf').value);PRICES.hwConfMics=parseFloat(document.getElementById('price_hwConfMics').value);PRICES.hwHeadsets=parseFloat(document.getElementById('price_hwHeadsets').value);PRICES.hwCordlessHandset=parseFloat(document.getElementById('price_hwCordlessHandset').value);PRICES.hwCordlessBase=parseFloat(document.getElementById('price_hwCordlessBase').value);PRICES.ata=parseFloat(document.getElementById('price_ata').value);PRICES.sidecar=parseFloat(document.getElementById('price_sidecar').value);PRICES.hwWallMount=parseFloat(document.getElementById('price_hwWallMount').value);PRICES.hwPowerSupply=parseFloat(document.getElementById('price_hwPowerSupply').value);toggleSettings();calculateTotals()}function toggleSwitchUI(checkboxId,trackId,dotId,bgClass){const cb=document.getElementById(checkboxId);const track=document.getElementById(trackId);const dot=document.getElementById(dotId);if(cb.checked){track.classList.remove('bg-slate-200','bg-amber-200');track.classList.add(bgClass);dot.classList.add('translate-x-full')}else{track.classList.add('bg-slate-200');if(trackId.includes('paging'))track.classList.add('bg-amber-200');track.classList.remove(bgClass);dot.classList.remove('translate-x-full')}}const inputs=document.querySelectorAll('.calc-trigger');inputs.forEach(input=>{input.addEventListener('input',calculateTotals);input.addEventListener('change',calculateTotals)});const accInputs=document.querySelectorAll('.acc-validate');accInputs.forEach(input=>{input.addEventListener('input',(e)=>{const parentId=e.target.getAttribute('data-parent');const parentQty=val(parentId);const currentQty=parseFloat(e.target.value);if(currentQty>parentQty){e.target.value=parentQty}})});['hwBasic','hwOffice','hwExec','hwConf'].forEach(parentId=>{document.getElementById(parentId).addEventListener('input',(e)=>{const parentQty=parseFloat(e.target.value)||0;const children=document.querySelectorAll(`.acc-validate[data-parent="${parentId}"]`);children.forEach(child=>{const childQty=parseFloat(child.value)||0;if(childQty>parentQty){child.value=parentQty}child.max=parentQty});updatePowerSupplies()})});document.getElementById('sipTrunkingToggle').addEventListener('change',(e)=>{document.getElementById('sipDetails').classList.toggle('hidden',!e.target.checked);toggleSwitchUI('sipTrunkingToggle','sipTrack','sipDot','bg-blue-500');calculateTotals()});document.getElementById('customerPoE').addEventListener('change',()=>{updatePowerSupplies();calculateTotals()});function updatePowerSupplies(){const hasPoE=document.getElementById('customerPoE').checked;const psuInputs=document.querySelectorAll('.psu-unit');psuInputs.forEach(input=>{const parentId=input.getAttribute('data-parent');const parentQty=val(parentId);if(!hasPoE){input.value=parentQty>0?parentQty:'';input.setAttribute('readonly',true);input.classList.add('bg-gray-100','text-gray-500')}else{input.removeAttribute('readonly');input.classList.remove('bg-gray-100','text-gray-500')}})}function calculateTotals(){let mrc=0;let otc=0;let hwTaxable=0;let mrcItems=[];let otcItems=[];const std=val('standardUsers');if(std){mrc+=std*PRICES.stdUser;otc+=std*PRICES.stdSetup;mrcItems.push(`<div class="summary-row"><span class="summary-label">${std}x Std User</span><span class="summary-val">$${std*PRICES.stdUser}</span></div>`)}const adv=val('advancedUsers');if(adv){mrc+=adv*PRICES.advUser;otc+=adv*PRICES.advSetup;mrcItems.push(`<div class="summary-row"><span class="summary-label">${adv}x Adv User</span><span class="summary-val">$${adv*PRICES.advUser}</span></div>`)}const cc=val('ccAgents');if(cc){mrc+=cc*PRICES.ccAgent;otc+=cc*PRICES.ccSetup;mrcItems.push(`<div class="summary-row"><span class="summary-label">${cc}x CC Agent</span><span class="summary-val">$${cc*PRICES.ccAgent}</span></div>`)}if(isChecked('sipTrunkingToggle')){const ch=val('sipChannels');mrc+=ch*PRICES.sipChannel;otc+=PRICES.sipSetup;mrcItems.push(`<div class="summary-row"><span class="summary-label">${ch}x SIP Ch</span><span class="summary-val">$${(ch*PRICES.sipChannel).toFixed(2)}</span></div>`)}const totalUsers=std+adv+cc;const portLocal=val('portLocal');const portTF=val('portTF');const newLocal=val('newLocal');const newTF=val('newTF');const totalNumbers=portLocal+portTF+newLocal+newTF;const includedNumbers=Math.min(totalNumbers,totalUsers);const excessNumbers=Math.max(0,totalNumbers-totalUsers);const excessCost=excessNumbers*1;mrc+=excessCost;if(includedNumbers>0){mrcItems.push(`<div class="summary-row"><span class="summary-label text-green-600">${includedNumbers}x DIDs (Included)</span><span class="summary-val">$0.00</span></div>`)}if(excessNumbers>0){mrcItems.push(`<div class="summary-row"><span class="summary-label">${excessNumbers}x Excess DIDs</span><span class="summary-val">$${excessCost.toFixed(2)}</span></div>`)}if(newLocal>0){otc+=newLocal*1;otcItems.push(`<div class="summary-row"><span class="summary-label">${newLocal}x New DID Setup</span><span class="summary-val">$${newLocal.toFixed(2)}</span></div>`)}if(newTF>0){otc+=newTF*2;otcItems.push(`<div class="summary-row"><span class="summary-label">${newTF}x New TF Setup</span><span class="summary-val">$${(newTF*2).toFixed(2)}</span></div>`)}const totalTF=portTF+newTF;if(totalTF>0){document.getElementById('tfCallout').classList.remove('hidden');const tfBundleCost=totalTF*15.00;mrc+=tfBundleCost;mrcItems.push(`<div class="summary-row"><span class="summary-label text-blue-500">${totalTF}x TF Bundle</span><span class="summary-val">$${tfBundleCost.toFixed(2)}</span></div>`)}else{document.getElementById('tfCallout').classList.add('hidden')}const recPlan=document.querySelector('input[name="callRecording"]:checked').value;if(recPlan!=='none'&&recPlan!=='onprem'){let recCost=0;let recSetup=0;let recLabel="";if(recPlan==='100'){recCost=PRICES.rec100;recSetup=PRICES.rec100Setup;recLabel="100hr Rec"}if(recPlan==='500'){recCost=PRICES.rec500;recSetup=PRICES.rec500Setup;recLabel="500hr Rec"}mrc+=recCost;otc+=recSetup;mrcItems.push(`<div class="summary-row"><span class="summary-label">${recLabel}</span><span class="summary-val">$${recCost}</span></div>`);otcItems.push(`<div class="summary-row"><span class="summary-label">${recLabel} Setup</span><span class="summary-val">$${recSetup}</span></div>`)}else if(recPlan==='onprem'){mrcItems.push(`<div class="summary-row"><span class="summary-label">On-Prem Rec</span><span class="summary-val">CUSTOM</span></div>`)}const basic=val('hwBasic');if(basic){const cost=basic*PRICES.hwBasic;otc+=cost;hwTaxable+=cost;otcItems.push(`<div class="summary-row"><span class="summary-label">${basic}x Basic Ph</span><span class="summary-val">$${cost}</span></div>`)}const office=val('hwOffice');if(office){const cost=office*PRICES.hwOffice;otc+=cost;hwTaxable+=cost;otcItems.push(`<div class="summary-row"><span class="summary-label">${office}x Office Ph</span><span class="summary-val">$${cost}</span></div>`)}const exec=val('hwExec');if(exec){const cost=exec*PRICES.hwExec;otc+=cost;hwTaxable+=cost;otcItems.push(`<div class="summary-row"><span class="summary-label">${exec}x Exec Ph</span><span class="summary-val">$${cost}</span></div>`)}const conf=val('hwConf');if(conf){const cost=conf*PRICES.hwConf;otc+=cost;hwTaxable+=cost;otcItems.push(`<div class="summary-row"><span class="summary-label">${conf}x Conf Ph</span><span class="summary-val">$${cost}</span></div>`)}const headsets=val('hwHeadsets');if(headsets){const cost=headsets*PRICES.hwHeadsets;otc+=cost;hwTaxable+=cost;otcItems.push(`<div class="summary-row"><span class="summary-label">${headsets}x Headsets</span><span class="summary-val">$${cost}</span></div>`)}const confMics=val('hwConfMics');if(confMics>0){const cost=confMics*PRICES.hwConfMics;otc+=cost;hwTaxable+=cost;otcItems.push(`<div class="summary-row"><span class="summary-label">${confMics}x Exp. Mics</span><span class="summary-val">$${cost}</span></div>`)}const mounts=val('mount_basic')+val('mount_office')+val('mount_exec');const psus=val('psu_basic')+val('psu_office')+val('psu_exec');if(mounts>0){const cost=mounts*PRICES.hwWallMount;otc+=cost;hwTaxable+=cost;otcItems.push(`<div class="summary-row"><span class="summary-label">${mounts}x Wall Mounts</span><span class="summary-val">$${cost}</span></div>`)}if(psus>0){const cost=psus*PRICES.hwPowerSupply;otc+=cost;hwTaxable+=cost;otcItems.push(`<div class="summary-row"><span class="summary-label">${psus}x Power Supplies</span><span class="summary-val">$${cost}</span></div>`);if(isChecked('customerPoE')){document.getElementById('poeWarning').classList.remove('hidden')}else{document.getElementById('poeWarning').classList.add('hidden')}}else{document.getElementById('poeWarning').classList.add('hidden')}const sides=val('sidecars');let extraSidecarPSUs=0;if(sides>0){let sCost=sides*PRICES.sidecar;hwTaxable+=sCost;otcItems.push(`<div class="summary-row"><span class="summary-label">${sides}x Sidecars</span><span class="summary-val">$${sCost}</span></div>`);extraSidecarPSUs=Math.ceil(sides/2);if(extraSidecarPSUs>0){const psuCost=extraSidecarPSUs*PRICES.sidecarPSU;sCost+=psuCost;hwTaxable+=psuCost;document.getElementById('sidecarPSUInfo').classList.remove('hidden');document.getElementById('sidecarPSUInfo').innerText=`+$${PRICES.sidecarPSU} PSU x ${extraSidecarPSUs} (Max Power Rule)`;otcItems.push(`<div class="summary-row"><span class="summary-label">${extraSidecarPSUs}x Sidecar PSUs</span><span class="summary-val">$${psuCost}</span></div>`)}else{document.getElementById('sidecarPSUInfo').classList.add('hidden')}otc+=sCost}else{document.getElementById('sidecarPSUInfo').classList.add('hidden')}const cordlessQty=val('hwCordless');let baseStations=0;let standaloneHandsets=0;if(cordlessQty>0){baseStations=Math.ceil(cordlessQty/8);standaloneHandsets=Math.max(0,cordlessQty-baseStations);const hsCost=standaloneHandsets*PRICES.hwCordlessHandset;const bsCost=baseStations*PRICES.hwCordlessBase;otc+=hsCost+bsCost;hwTaxable+=hsCost+bsCost;if(standaloneHandsets>0)otcItems.push(`<div class="summary-row"><span class="summary-label">${standaloneHandsets}x Extra Handsets</span><span class="summary-val">$${hsCost}</span></div>`);otcItems.push(`<div class="summary-row"><span class="summary-label">${baseStations}x Base Kits</span><span class="summary-val">$${bsCost}</span></div>`);document.getElementById('baseStationCount').innerText=baseStations;document.getElementById('extraHandsetCount').innerText=standaloneHandsets;document.getElementById('cordlessInfo').classList.remove('hidden')}else{document.getElementById('cordlessInfo').classList.add('hidden')}if(cordlessQty>16){document.getElementById('cordlessWarning').classList.remove('hidden')}else{document.getElementById('cordlessWarning').classList.add('hidden')}const efax=val('efaxQty');if(efax){mrc+=efax*PRICES.efax;otc+=efax*PRICES.efaxSetup;mrcItems.push(`<div class="summary-row"><span class="summary-label">${efax}x E-Fax</span><span class="summary-val">$${efax*PRICES.efax}</span></div>`)}const phyFax=val('physicalFaxQty');if(phyFax){mrc+=phyFax*PRICES.potsLine;const faxHw=phyFax*PRICES.ata;const faxCfg=phyFax*PRICES.phyFaxConfig;otc+=faxHw+faxCfg;hwTaxable+=faxHw;mrcItems.push(`<div class="summary-row"><span class="summary-label">${phyFax}x POTS Repl. Line</span><span class="summary-val">$${phyFax*PRICES.potsLine}</span></div>`);otcItems.push(`<div class="summary-row"><span class="summary-label">${phyFax}x ATA+Cfg</span><span class="summary-val">$${faxHw+faxCfg}</span></div>`)}const pagingQty=val('pagingQty');let surveyFee=0;const floorplanNo=document.getElementById('fpNo').checked;if(pagingQty>0){const pagingHw=pagingQty*PRICES.ata;const pagingCfg=pagingQty*PRICES.pagingConfig;const pagingMrc=pagingQty*PRICES.potsLine;otc+=pagingHw+pagingCfg;hwTaxable+=pagingHw;mrc+=pagingMrc;otcItems.push(`<div class="summary-row"><span class="summary-label">${pagingQty}x Paging HW+Cfg</span><span class="summary-val">$${pagingHw+pagingCfg}</span></div>`);mrcItems.push(`<div class="summary-row"><span class="summary-label">${pagingQty}x Paging POTS Line</span><span class="summary-val">$${pagingMrc}</span></div>`)}if(pagingQty>0||(cordlessQty>0&&floorplanNo)){surveyFee=PRICES.pagingSurvey;otc+=surveyFee;otcItems.push(`<div class="summary-row"><span class="summary-label">Site Survey</span><span class="summary-val">$${surveyFee}</span></div>`)}const phones=val('hwBasic')+val('hwOffice')+val('hwExec')+val('hwConf')+val('hwCordless');const atas=phyFax+pagingQty;const totalDevices=phones+atas;document.getElementById('totalDeviceCount').innerText=`${totalDevices} Devices`;let breakdownText="";if(phones>0&&atas>0)breakdownText=`${phones} Phones + ${atas} ATAs`;else if(phones>0)breakdownText=`${phones} Phones`;else if(atas>0)breakdownText=`${atas} ATAs`;document.getElementById('deviceBreakdown').innerText=breakdownText;let deployFee=0;let deployMsg="";let deploymentRequired=false;if(totalDevices>0){const blocks=Math.ceil(totalDevices/5);deployFee=blocks*169;deployMsg=`$169 per 5 devices (${blocks} blocks)`}else{deployMsg="Add hardware to calc fee"}const hasATA=(phyFax>0||pagingQty>0);const installCb=document.getElementById('includeInstall');const installStatus=document.getElementById('installStatus');if(hasATA){deploymentRequired=true;installCb.checked=true;installCb.disabled=true;installStatus.innerText="MANDATORY (ATA)";installStatus.className="text-[10px] font-bold text-orange-500 uppercase"}else{deploymentRequired=false;installCb.disabled=false;if(totalDevices===0)installCb.disabled=true;installStatus.innerText="OPTIONAL";installStatus.className="text-[10px] font-bold text-slate-500 uppercase"}if(installCb.checked&&totalDevices>0){otc+=deployFee;document.getElementById('deployFeeDisplay').innerText='$'+deployFee.toFixed(2);otcItems.push(`<div class="summary-row"><span class="summary-label">Onsite Deploy</span><span class="summary-val">$${deployFee}</span></div>`)}else{document.getElementById('deployFeeDisplay').innerText='$0.00'}document.getElementById('deployMsg').innerText=deployMsg;if(hwTaxable>0){const tax=hwTaxable*0.07;otc+=tax;otcItems.push(`<div class="summary-row"><span class="summary-label text-slate-500/80">Est. Sales Tax (7% of HW)</span><span class="summary-val">$${tax.toFixed(2)}</span></div>`)}const totalEndpoints=phones;const totalLicenses=std+adv+cc;if(totalEndpoints>totalLicenses){document.getElementById('licenseError').classList.remove('hidden');document.getElementById('licenseErrorSidebar').classList.remove('hidden');document.getElementById('errEndCount').innerText=totalEndpoints;document.getElementById('errLicCount').innerText=totalLicenses}else{document.getElementById('licenseError').classList.add('hidden');document.getElementById('licenseErrorSidebar').classList.add('hidden')}document.getElementById('totalMRC').innerText='$'+mrc.toFixed(2);document.getElementById('totalOTC').innerText='$'+otc.toFixed(2);document.getElementById('mrcList').innerHTML=mrcItems.length?mrcItems.join(''):'<div class="text-sm text-slate-600 italic">No items yet...</div>';document.getElementById('otcList').innerHTML=otcItems.length?otcItems.join(''):'<div class="text-sm text-slate-600 italic">No items yet...</div>'}
+
+    window.onload=function(){updatePowerSupplies();calculateTotals()};
+</script>
+</body>
+</html>
