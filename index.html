@@ -205,13 +205,13 @@
     });
 
     /* =========================================
-       2. SAVE & PROCEED LOGIC (The "Notes" Fix)
+       2. SAVE & PROCEED LOGIC (Note-First Method)
        ========================================= */
     function submitToBlueprint() {
         // A. Visual Feedback
         const btn = document.getElementById('btnProceed');
         const originalText = btn.innerHTML;
-        btn.innerHTML = "Saving...";
+        btn.innerHTML = "Saving Note...";
         btn.disabled = true;
         btn.classList.add('opacity-75', 'cursor-not-allowed');
 
@@ -219,25 +219,33 @@
         calculateTotals(); 
         const summaryText = generateSummaryText();
 
-        // C. Execute Transition with NOTES
-        // Since we cannot write to "Description" (due to UI limitations),
-        // we save the summary as a Transition Note.
-        ZOHO.CRM.BLUEPRINT.proceed({
-            action : "save", 
-            notes : summaryText  // <--- This puts the text in the record's Notes/Timeline
+        // C. Step 1: Create the Note explicitly
+        // We try to add a standard Note first for better visibility
+        ZOHO.CRM.API.addNotes({
+            Entity: ZOHO_MODULE,
+            RecordID: ZOHO_RECORD_ID,
+            Title: "Configuration Worksheet",
+            Content: summaryText
         })
         .then(function(data){
-            console.log("Blueprint Transition Success:", data);
-            // Widget closes automatically
+            console.log("Note Added Successfully. Now moving stage...");
+            
+            // D. Step 2: Execute the Blueprint Transition
+            ZOHO.CRM.BLUEPRINT.proceed({
+                action : "save", 
+                data : {} 
+            });
         })
         .catch(function(error){
-            console.error("Blueprint Error:", error);
-            alert("Error processing transition: " + JSON.stringify(error));
+            console.error("Note API Failed:", error);
             
-            // Reset button on error
-            btn.innerHTML = originalText;
-            btn.disabled = false;
-            btn.classList.remove('opacity-75', 'cursor-not-allowed');
+            // Fallback: If the Note API fails (due to strict permissions), 
+            // we proceed anyway and dump the text into the Blueprint history.
+            console.log("Attempting fallback transition...");
+            ZOHO.CRM.BLUEPRINT.proceed({
+                action : "save", 
+                notes : summaryText 
+            });
         });
     }
 
@@ -270,4 +278,5 @@
 </script>
 </body>
 </html>
+
 
