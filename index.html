@@ -191,17 +191,36 @@
 
 <script>
     /* =========================================
-       1. ZOHO SDK INITIALIZATION
+       1. ZOHO SDK INITIALIZATION (FIXED ORDER)
        ========================================= */
     let ZOHO_RECORD_ID = null;
-    let ZOHO_MODULE = "Deals"; // Default to Deals
+    let ZOHO_MODULE = "Deals"; // Default
 
-    ZOHO.embeddedApp.init().then(function(){
-        ZOHO.embeddedApp.on("PageLoad", function(data){
+    // 1. Start Listening FIRST (Before initialization)
+    // This ensures we catch the data even if it arrives instantly
+    ZOHO.embeddedApp.on("PageLoad", function(data){
+        console.log(">>> DEBUG: PageLoad Event Fired:", data);
+        
+        // Robust ID Extraction (Handles single ID or Arrays)
+        if(data && data.EntityId) {
             ZOHO_RECORD_ID = data.EntityId;
-            if(data.Entity) ZOHO_MODULE = data.Entity; 
-            console.log("Widget Loaded. Module: " + ZOHO_MODULE + " | ID: " + ZOHO_RECORD_ID);
-        });
+            // Sometimes Zoho sends an array [id], sometimes just the id. Handle both.
+            if(Array.isArray(ZOHO_RECORD_ID)) {
+                ZOHO_RECORD_ID = ZOHO_RECORD_ID[0];
+            }
+        }
+        
+        if(data && data.Entity) {
+            ZOHO_MODULE = data.Entity;
+        }
+
+        console.log(">>> DEBUG: Captured ID:", ZOHO_RECORD_ID);
+        console.log(">>> DEBUG: Captured Module:", ZOHO_MODULE);
+    });
+
+    // 2. Initialize the App
+    ZOHO.embeddedApp.init().then(function(){
+        console.log(">>> DEBUG: SDK Initialized");
     });
 
     /* =========================================
@@ -281,6 +300,7 @@
 </script>
 </body>
 </html>
+
 
 
 
