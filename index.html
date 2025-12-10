@@ -205,7 +205,7 @@
     });
 
     /* =========================================
-       2. SAVE & PROCEED LOGIC
+       2. SAVE & PROCEED LOGIC (The "Notes" Fix)
        ========================================= */
     function submitToBlueprint() {
         // A. Visual Feedback
@@ -216,33 +216,25 @@
         btn.classList.add('opacity-75', 'cursor-not-allowed');
 
         // B. Generate the Summary Text
-        calculateTotals(); // Ensure math is fresh
+        calculateTotals(); 
         const summaryText = generateSummaryText();
 
-        // C. Update the Opportunity 'Description' Field First
-        var updateConfig = {
-            Entity: ZOHO_MODULE,
-            APIData: {
-                "id": ZOHO_RECORD_ID,
-                "Description": summaryText
-            },
-            Trigger: ["workflow"] // Triggers workflows if you have them
-        };
-
-        ZOHO.CRM.API.updateRecord(updateConfig).then(function(data){
-            console.log("Description Updated:", data);
+        // C. Execute Transition with NOTES
+        // Since we cannot write to "Description" (due to UI limitations),
+        // we save the summary as a Transition Note.
+        ZOHO.CRM.BLUEPRINT.proceed({
+            action : "save", 
+            notes : summaryText  // <--- This puts the text in the record's Notes/Timeline
+        })
+        .then(function(data){
+            console.log("Blueprint Transition Success:", data);
+            // Widget closes automatically
+        })
+        .catch(function(error){
+            console.error("Blueprint Error:", error);
+            alert("Error processing transition: " + JSON.stringify(error));
             
-            // D. If Update Successful -> Proceed Blueprint Transition
-            ZOHO.CRM.BLUEPRINT.proceed({
-                action : "save", 
-                data : {} 
-            }).then(function(){
-                console.log("Blueprint Transitioned");
-            });
-
-        }).catch(function(error){
-            console.error("Error updating record:", error);
-            alert("Error saving description to CRM. Check console for details.");
+            // Reset button on error
             btn.innerHTML = originalText;
             btn.disabled = false;
             btn.classList.remove('opacity-75', 'cursor-not-allowed');
@@ -278,3 +270,4 @@
 </script>
 </body>
 </html>
+
