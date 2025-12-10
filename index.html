@@ -205,9 +205,15 @@
     });
 
     /* =========================================
-       2. SAVE & PROCEED LOGIC (Note-First Method)
+       2. SAVE & PROCEED LOGIC (Debug Version 3.0)
        ========================================= */
     function submitToBlueprint() {
+        // --- DEBUGGING START ---
+        console.log(">>> DEBUG: V3.0 LOGIC LOADED <<<");
+        alert("DEBUG: New Code Loaded (V3.0)"); 
+        // If you don't see this alert, you are running old cached code!
+        // --- DEBUGGING END ---
+
         // A. Visual Feedback
         const btn = document.getElementById('btnProceed');
         const originalText = btn.innerHTML;
@@ -219,8 +225,7 @@
         calculateTotals(); 
         const summaryText = generateSummaryText();
 
-        // C. Step 1: Create the Note explicitly
-        // We try to add a standard Note first for better visibility
+        // C. Step 1: Try to create the Note explicitly via API
         ZOHO.CRM.API.addNotes({
             Entity: ZOHO_MODULE,
             RecordID: ZOHO_RECORD_ID,
@@ -228,7 +233,7 @@
             Content: summaryText
         })
         .then(function(data){
-            console.log("Note Added Successfully. Now moving stage...");
+            console.log("SUCCESS: Note Added via API", data);
             
             // D. Step 2: Execute the Blueprint Transition
             ZOHO.CRM.BLUEPRINT.proceed({
@@ -237,18 +242,16 @@
             });
         })
         .catch(function(error){
-            console.error("Note API Failed:", error);
+            console.error("FAILURE: Note API Failed", error);
             
-            // Fallback: If the Note API fails (due to strict permissions), 
-            // we proceed anyway and dump the text into the Blueprint history.
-            console.log("Attempting fallback transition...");
+            // Fallback: If API fails, dump text into Blueprint notes
+            console.log("Attempting fallback to Blueprint Notes...");
             ZOHO.CRM.BLUEPRINT.proceed({
                 action : "save", 
                 notes : summaryText 
             });
         });
     }
-
     /* =========================================
        3. TEXT GENERATION & CLIPBOARD
        ========================================= */
@@ -278,5 +281,6 @@
 </script>
 </body>
 </html>
+
 
 
